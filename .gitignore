@@ -1,7 +1,0 @@
-# Ignore the entire virtual environment folder
-venv/
-# Ignore PyTorch cache files (just in case)
-*.pt
-# Ignore all compiled Python bytecode files
-*.pyc
-__pycache__/
