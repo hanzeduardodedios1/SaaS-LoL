@@ -14,7 +14,6 @@ flowchart LR
         Auth["User Auth (Firebase)"]     
     end
     UI-->|FastAPI|Backend
-    U
 
     %%Backend
     subgraph Backend["Backend (FastAPI)"]
