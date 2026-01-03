@@ -1,3 +1,5 @@
+##Purpose of this file is to retrieve raw data using 'requests'
+
 import os
 import requests
 import urllib.parse
@@ -29,6 +31,12 @@ def get_puuid(game_name, tag_line):
         return requests.json().get("puuid")
     return None
 
-
-
+# ----------------------------------------------------------------------------------------------------------
+# 2. Retrieving match history
+# ----------------------------------------------------------------------------------------------------------
+def get_match_history(puuid):
+    match_history = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids"
+    response = requests.get(match_history, headers=headers)
+    if response.status_code == 200:
+        return requests.json().get("")
 
