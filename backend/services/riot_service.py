@@ -34,9 +34,13 @@ def get_puuid(game_name, tag_line):
 # ----------------------------------------------------------------------------------------------------------
 # 2. Retrieving match history
 # ----------------------------------------------------------------------------------------------------------
-def get_match_history(puuid):
-    match_history = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids"
-    response = requests.get(match_history, headers=headers)
+def get_match_history(puuid, count = 5):
+    ##retrieving 5 match_ids
+    url = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}"
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return requests.json().get("")
+        return requests.json()
+    return []
+
+
 
