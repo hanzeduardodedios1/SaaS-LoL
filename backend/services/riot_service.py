@@ -4,9 +4,23 @@ import os
 import requests
 import urllib.parse
 from dotenv import load_dotenv
+from pathlib import Path
 
-#load the .env file
-load_dotenv()
+#_________________________________________
+#Find the API key
+# 1. find this file
+current_file = Path(__file__).resolve()
+
+# 2. find 'backend' folder then look for .env
+env_path = current_file.parent.parent/'.env'
+
+# 3. Now we can open the file we're looking for
+load_dotenv(dotenv_path=env_path)
+#_________________________________________
+
+# Debug
+print(f"DEBUG: Looking for .env at: {env_path}")
+print(f"DEBUG: File exists? {env_path.exists()}")
 
 #Get API key safely
 #Goes to the .env file and retrieves 'RIOT-API-KEY' value
@@ -14,7 +28,9 @@ API_KEY = os.getenv("RIOT-API-KEY")
 
 #Safety check
 if not API_KEY:
-    raise ValueError("No API Key found.")
+    print("ERROR: No API Key found.")
+else:
+    print("SUCCESS: API Key loaded!")
 
 headers = {
     "X-Riot-Token: ": API_KEY
@@ -34,7 +50,7 @@ def get_puuid(game_name, tag_line):
 # ----------------------------------------------------------------------------------------------------------
 # 2. Retrieving match history
 # ----------------------------------------------------------------------------------------------------------
-def get_match_history(puuid, count = 5):
+def get_match_history(puuid, count=5):
     ##retrieving 5 match_ids
     url = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}"
     response = requests.get(url, headers=headers)

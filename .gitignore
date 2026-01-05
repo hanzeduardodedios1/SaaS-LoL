@@ -1,0 +1,31 @@
+#Virtual Environment
+venv/
+venv_new/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Transcripts and data
+transcripts/
+*.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+
+#should not show API keys!!!!
+.env
+sandbox.py
