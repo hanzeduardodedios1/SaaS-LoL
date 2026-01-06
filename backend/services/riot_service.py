@@ -18,22 +18,16 @@ env_path = current_file.parent.parent/'.env'
 load_dotenv(dotenv_path=env_path)
 #_________________________________________
 
-# Debug
-print(f"DEBUG: Looking for .env at: {env_path}")
-print(f"DEBUG: File exists? {env_path.exists()}")
-
 #Get API key safely
 #Goes to the .env file and retrieves 'RIOT-API-KEY' value
-API_KEY = os.getenv("RIOT-API-KEY")
+API_KEY = os.getenv("RIOT_API_KEY")
 
 #Safety check
 if not API_KEY:
-    print("ERROR: No API Key found.")
-else:
-    print("SUCCESS: API Key loaded!")
+    raise ValueError("No API Key found.")
 
 headers = {
-    "X-Riot-Token: ": API_KEY
+    "X-Riot-Token": API_KEY
 } #"X-Riot-Token" is the SPECIFIC HEADER for RIOT servers
 
 # ----------------------------------------------------------------------------------------------------------
@@ -44,7 +38,7 @@ def get_puuid(game_name, tag_line):
     url = f"https://americas.api.riotgames.com/riot/account/v1/accounts/by-riot-id/{game_name}/{tag_line}"
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return requests.json().get("puuid")
+        return response.json().get("puuid")
     return None
 
 # ----------------------------------------------------------------------------------------------------------
@@ -55,7 +49,7 @@ def get_match_history(puuid, count=5):
     url = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count={count}"
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return requests.json()
+        return response.json()
     return []
 
 
