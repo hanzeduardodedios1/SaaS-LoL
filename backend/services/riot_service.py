@@ -52,5 +52,18 @@ def get_match_history(puuid, count=5):
         return response.json()
     return []
 
+# ----------------------------------------------------------------------------------------------------------
+# 3. Retrieving match details
+# ----------------------------------------------------------------------------------------------------------
+def get_match_details(match_id):
+    url = f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        #DEBUGGING
+        print("Error in finding details.")
+        print(response)
+        return None
 
 
