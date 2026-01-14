@@ -4,6 +4,13 @@ from fastapi import APIRouter
 router = APIRouter()
 #This file will handle everything after the user inputs their username and tagline
 
+#
+def build_item_url(item_id, version):
+    if not item_id or item_id == 0:
+        return None
+    return f"https://ddragon.leagueoflegends.com/cdn/{version}/img/item/{item_id}.png"
+
+
 @router.get("/player/{game_name}/{tag_line}")
 def get_player_data(game_name: str, tag_line: str):
 
