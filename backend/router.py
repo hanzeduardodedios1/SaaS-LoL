@@ -4,7 +4,7 @@ from fastapi import APIRouter
 router = APIRouter()
 #This file will handle everything after the user inputs their username and tagline
 
-#
+#Retrieve a link of player's item image
 def build_item_url(item_id, version):
     if not item_id or item_id == 0:
         return None
