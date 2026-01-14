@@ -56,13 +56,13 @@ def get_player_data(game_name: str, tag_line: str):
 
                     #Player's Items
                     'Items': [
-                        target_player.get('Item0'),
-                        target_player.get('Item1'),
-                        target_player.get('Item2'),
-                        target_player.get('Item3'),
-                        target_player.get('Item4'),
-                        target_player.get('Item5'),
-                        target_player.get('Item6'), #Ward
+                        target_player.get('item0'),
+                        target_player.get('item1'),
+                        target_player.get('item2'),
+                        target_player.get('item3'),
+                        target_player.get('item4'),
+                        target_player.get('item5'),
+                        target_player.get('item6'), #Ward
                     ]
                 }
             filtered_analysis.append(filtered_stats)
