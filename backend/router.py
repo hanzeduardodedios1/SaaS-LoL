@@ -8,7 +8,7 @@ router = APIRouter()
 def get_player_data(game_name: str, tag_line: str):
 
     #get PUUID
-    puuid = riot_service.get_puiid(game_name, tag_line)
+    puuid = riot_service.get_puuid(game_name, tag_line)
     #get match_history
     match_history = riot_service.get_match_history(puuid)
     
