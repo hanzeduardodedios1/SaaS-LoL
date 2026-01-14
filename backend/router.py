@@ -22,6 +22,9 @@ def get_player_data(game_name: str, tag_line: str):
     #Place useful data here
     filtered_analysis = []
 
+    #Retrieve game version
+    current_version = riot_service.get_latest_version()
+
     #get match details
     for match_id in match_history:
         raw_data = riot_service.get_match_details(match_id)
@@ -63,13 +66,13 @@ def get_player_data(game_name: str, tag_line: str):
 
                     #Player's Items
                     'Items': [
-                        target_player.get('item0'),
-                        target_player.get('item1'),
-                        target_player.get('item2'),
-                        target_player.get('item3'),
-                        target_player.get('item4'),
-                        target_player.get('item5'),
-                        target_player.get('item6'), #Ward
+                        build_item_url(target_player.get('item0'), current_version),
+                        build_item_url(target_player.get('item1'), current_version),
+                        build_item_url(target_player.get('item2'), current_version),
+                        build_item_url(target_player.get('item3'), current_version),
+                        build_item_url(target_player.get('item4'), current_version),
+                        build_item_url(target_player.get('item5'), current_version),
+                        build_item_url(target_player.get('item6'), current_version) #Ward
                     ]
                 }
             filtered_analysis.append(filtered_stats)
