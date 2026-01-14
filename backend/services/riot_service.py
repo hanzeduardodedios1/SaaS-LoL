@@ -72,7 +72,7 @@ def get_match_details(match_id):
 # ----------------------------------------------------------------------------------------------------------
 def get_latest_version():
     url = 'https://ddragon.leagueoflegends.com/api/versions.json'
-    response = response.get(url)
+    response = requests.get(url)
     if response.status_code == 200:
         return response.json()[0]
     return "14.1.1" #fallback
