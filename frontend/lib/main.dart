@@ -43,9 +43,7 @@ class _BackendTesterState extends State<BackendTester> {
 
     //Safety check for empty inputs
     if(name.isEmpty || tag.isEmpty) {
-      setState(() {
-        _message = "Please enter both Username and Tagline";
-      });
+      setState(() => _statusMessage = "Please enter both Username and Tag");
       return;
     }
     //Clears previous inputs
