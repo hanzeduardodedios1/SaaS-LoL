@@ -29,14 +29,27 @@ class _BackendTesterState extends State<BackendTester> {
   //String variable that will contain information from backend.
   String _message =   "No data yet";
 
+  //Controllers for obtaining user input
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _tagController = TextEditingController();
+
   
   Future<void> fetchFromBackend() async {
+    final name = _nameController.text;
+    final tag = _tagController.text;
 
-    //The URL destination
-    final url = Uri.parse('http://127.0.0.1:8000/');
+    //Safety check for empty inputs
+    if(name.isEmpty || tag.isEmpty) {
+      setState(() {
+        _message = "Please enter both Username and Tagline";
+      });
+      return;
+    }
+
+    //The URL destination (takes game name and tagline)
+    final url = Uri.parse('http://127.0.0.1:8000/player/$name/$tag');
 
     try {
-
       //Stores the URL's response
       final response = await http.get(url);
 
@@ -66,21 +79,41 @@ class _BackendTesterState extends State<BackendTester> {
     return Scaffold(
       appBar: AppBar(title: const Text("Backend Connection Test")),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // The text widget displays whatever is currently in '_message'
-            Text(_message, textAlign: TextAlign.center), 
-            const SizedBox(height: 20),
-            
-            // The button that starts the 'fetchFromBackend' function
-            ElevatedButton(
-              onPressed: fetchFromBackend, 
-              child: const Text("Ping Server"),
+        // Added Padding so the boxes aren't stuck to the edges
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_message, textAlign: TextAlign.center), 
+              const SizedBox(height: 20),
+              
+              // CHANGE 4: Add the actual Input Boxes (TextFields)
+              TextField(
+                controller: _nameController, // Connects box to variable
+                decoration: const InputDecoration(
+                  labelText: "Game Name (e.g. Doublelift)",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              TextField(
+                controller: _tagController, // Connects box to variable
+                decoration: const InputDecoration(
+                  labelText: "Tag Line (e.g. NA1)",
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              ElevatedButton(
+                onPressed: fetchFromBackend, 
+                child: const Text("Ping Server"),
             ),
           ],
         ),
       ),
-    );
+    ));
   }
 }
