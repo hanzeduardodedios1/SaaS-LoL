@@ -58,11 +58,15 @@ def get_player_data(game_name: str, tag_line: str):
                     'match_id': match_id,
                     'champion': target_player.get('championName'),
                     'win': target_player.get('win'),
+                    'game_duration': info.get('gameDuration'),
 
                     #KDA
-                    'Kills': target_player.get('kills'),
-                    'Deaths': target_player.get('deaths'),
-                    'Assists': target_player.get('assists'),
+                    'kills': target_player.get('kills'),
+                    'deaths': target_player.get('deaths'),
+                    'assists': target_player.get('assists'),
+
+                    #Damage Dealt
+                    'total_damage': target_player.get('totalDamageDealth'),
 
                     #Economy
                     'gold_earned': target_player.get('goldEarned'),
