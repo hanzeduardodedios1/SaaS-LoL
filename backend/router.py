@@ -66,7 +66,7 @@ def get_player_data(game_name: str, tag_line: str):
                     'assists': target_player.get('assists'),
 
                     #Damage Dealt
-                    'total_damage': target_player.get('totalDamageDealt'),
+                    'total_damage': target_player.get('totalDamageDealtToChampions'),
 
                     #Economy
                     'gold_earned': target_player.get('goldEarned'),
