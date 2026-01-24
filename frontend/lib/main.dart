@@ -154,12 +154,29 @@ class _BackendTesterState extends State<BackendTester> {
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                             ),
                             Text(
+                              "${match['kills']} / ${match['deaths']} / ${match['assists']}",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  // Make KDA green if they did well (Kills > Deaths), else grey
+                                  color: (match['kills'] ?? 0) > (match['deaths'] ?? 0) 
+                                      ? Colors.green[700] 
+                                      : Colors.grey[800],
+                                  )
+                            ),
+                            Text(
                               isWin ? "VICTORY" : "DEFEAT",
                               style: TextStyle(
                                 color: isWin ? Colors.blue : Colors.red,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            Text(
+                              "Gold: ${match['gold_earned']}  |  CS: ${match['cs']}  |  Dmg: ${match['total_damage']}",
+                              style: TextStyle(color: Colors.grey[700], fontSize: 12),
+                            ),
+
+                            const SizedBox(height: 10,)
                           ],
                         ),
                         Text("Gold: ${match['gold_earned']} | CS: ${match['cs']}"),
