@@ -1,3 +1,4 @@
+```markdown
 # League of Legends Analytics Dashboard 📊
 
 A full-stack, cross-platform application that provides real-time player statistics and match history analysis. This project demonstrates a **decoupled microservices architecture**, optimizing bandwidth and API usage through a custom Python proxy server.
@@ -45,7 +46,6 @@ flowchart LR
         RiotAPI["Riot Games API"]
     end
 
-```markdown
     Proxy -->|Requests Data| RiotAPI
     RiotAPI -.->|Raw Data| Proxy
     Proxy -.->|Optimized JSON| Frontend
