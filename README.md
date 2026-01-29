@@ -50,29 +50,35 @@ flowchart LR
     Proxy -.->|Optimized JSON| Frontend
 ```
 
-🚀 Tech Stack
-Frontend: Flutter (Dart) - Deployed on Netlify
+## 🚀 Tech Stack
 
-Backend: Python (FastAPI) - Deployed on Render
+**Frontend:** Flutter (Dart) - Deployed on Netlify
+**Backend:** Python (FastAPI) - Deployed on Render
+**API:** Riot Games Public API
+**Architecture:** RESTful API, Repository Pattern
 
-API: Riot Games Public API
+---
 
-Architecture: RESTful API, Repository Pattern
+## 🛠️ Key Engineering Features
 
-🛠️ Key Engineering Features
-Proxy Server Pattern: Implemented a Python middleware to hide the Riot API Key from the client-side, preventing security leaks.
+* **Proxy Server Pattern:** Implemented a Python middleware to hide the Riot API Key from the client-side, preventing security leaks.
+* **Server-Side Filtering:** The backend pre-processes match data (filtering for Ranked Queue ID 420), reducing the data payload sent to the mobile device by 40%.
+* **CORS Configuration:** Configured secure Cross-Origin Resource Sharing to allow the decoupled frontend to communicate with the hosted backend.
+* **Error Handling:** Robust handling for 404s (User Not Found) and external API timeouts.
 
-Server-Side Filtering: The backend pre-processes match data (filtering for Ranked Queue ID 420), reducing the data payload sent to the mobile device by 40%.
+---
 
-CORS Configuration: Configured secure Cross-Origin Resource Sharing to allow the decoupled frontend to communicate with the hosted backend.
+## 📸 Screenshots
 
-Error Handling: Robust handling for 404s (User Not Found) and external API timeouts.
+*(Drag and drop a screenshot of your app running here)*
 
-📸 Screenshots
-(Drag and drop a screenshot of your app running here)
+---
 
-🔧 Local Setup & Installation
-1. Backend (Python)
+## 🔧 Local Setup & Installation
+
+### 1. Backend (Python)
+
+```bash
 cd backend
 # Create virtual env (optional)
 python -m venv venv
@@ -83,13 +89,16 @@ pip install -r requirements.txt
 
 # Run server
 uvicorn main:app --reload
+```
 
-2. Frontend (Flutter)
+### 2. Frontend (Flutter)
+```bash
 # Install dependencies
 flutter pub get
 
 # Run on Chrome
 flutter run -d chrome
+```
 
 🔮 Future Improvements
 Redis Caching: Cache frequent player lookups to reduce API calls to Riot.
