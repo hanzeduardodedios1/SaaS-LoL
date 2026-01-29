@@ -48,6 +48,7 @@ flowchart LR
     Proxy -->|Requests Data| RiotAPI
     RiotAPI -.->|Raw Data| Proxy
     Proxy -.->|Optimized JSON| Frontend
+```
 
 🚀 Tech Stack
 Frontend: Flutter (Dart) - Deployed on Netlify
