@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiService {
   // Use 127.0.0.1:8000 for Web (Chrome)
-  final String baseUrl = "http://127.0.0.1:8000";
+  final String baseUrl = "https://league-dashboard-api.onrender.com/";
 
   // List (for the list of matches)
   Future<List<dynamic>> fetchPlayerMatches(String riotId) async {
