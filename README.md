@@ -45,11 +45,12 @@ flowchart LR
         RiotAPI["Riot Games API"]
     end
 
+```markdown
     Proxy -->|Requests Data| RiotAPI
     RiotAPI -.->|Raw Data| Proxy
     Proxy -.->|Optimized JSON| Frontend
 
-🚀 Tech Stack
+`Proxy -.->|Optimized JSON| Frontend ## 🚀 Tech Stack`
 Frontend: Flutter (Dart) - Deployed on Netlify
 
 Backend: Python (FastAPI) - Deployed on Render
