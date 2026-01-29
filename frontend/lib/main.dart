@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Import the tool to make internet requests
-import 'dart:convert'; //Enables conversion of raw text into list
+import 'api_service.dart'; // <--- Connects to your new logic file
 
 void main() {
   runApp(const MyApp());
@@ -11,85 +10,68 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const BackendTester(), //will default homepage to BackendTester below
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MatchHistoryScreen(),
     );
   }
 }
 
-//Data and displayed information will change | Stateful
-class BackendTester extends StatefulWidget {
-  const BackendTester({super.key});
+class MatchHistoryScreen extends StatefulWidget {
+  const MatchHistoryScreen({super.key});
 
   @override
-  State<BackendTester> createState() => _BackendTesterState();
+  State<MatchHistoryScreen> createState() => _MatchHistoryScreenState();
 }
 
-//This class primarily works with the backend.
-class _BackendTesterState extends State<BackendTester> {
+class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
+  // 1. Initialize the Service
+  final ApiService _apiService = ApiService();
 
-  //Storing a list of matches
+  // 2. UI State Variables
   List<dynamic> _matches = [];
-  String _statusMessage = "Enter a name to search: ";
+  bool _isLoading = false;
+  String _errorMessage = "";
 
-  //Controllers for obtaining user input
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _tagController = TextEditingController();
 
-  
-  Future<void> fetchFromBackend() async {
-    final name = _nameController.text;
-    final tag = _tagController.text;
+  // 3. The Clean Function
+  void _searchPlayer() async {
+    // Combine inputs | Username and Tagline
+    String fullId = "${_nameController.text}#${_tagController.text}";
 
-    //Safety check for empty inputs
-    if(name.isEmpty || tag.isEmpty) {
-      setState(() => _statusMessage = "Please enter both Username and Tag");
-      return;
-    }
-    //Clears previous inputs
     setState(() {
+      _isLoading = true;
+      _errorMessage = "";
       _matches = [];
-      _statusMessage = "Loading...";
     });
 
-    //The URL destination (takes game name and tagline)
-    final url = Uri.parse('http://127.0.0.1:8000/player/$name/$tag');
-
     try {
-      //Stores the URL's response
-      final response = await http.get(url);
-      
+      // ASK THE SERVICE FOR DATA
+      final data = await _apiService.fetchPlayerMatches(fullId);
 
-      //If successful, 
-      if (response.statusCode == 200) {
-        //Turns JSON string into an actual list
-        final List<dynamic> data = jsonDecode(response.body);
-
-        setState(() {
-          _matches = data;
-          _statusMessage = _matches.isEmpty ? "No ranked games found" : "";
-        });
-      }
-      else {
-        setState(() {
-          _statusMessage = "Error: Server response ${response.statusCode}";
-        });
-      }
-    }
-    //If unable to connect to server, display connection failure.
-      catch(e){
-        setState(() {
-          _statusMessage = "Connection Failed: $e";
+      setState(() {
+        _matches = data;
+        _isLoading = false;
+        if (_matches.isEmpty) _errorMessage = "No ranked games found.";
+      });
+    } catch (e) {
+      setState(() {
+        // Clean up the error message for the user
+        _errorMessage = e.toString().replaceAll("Exception: ", "");
+        _isLoading = false;
       });
     }
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("League SaaS MVP")),
       body: Column(
         children: [
-          // --- TOP SECTION: INPUTS ---
+          // --- SECTION 1: SEARCH INPUTS ---
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -115,27 +97,32 @@ class _BackendTesterState extends State<BackendTester> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: fetchFromBackend,
-                    child: const Text("Ping Server"),
+                    onPressed: _isLoading ? null : _searchPlayer, // Disable if loading
+                    child: _isLoading 
+                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Text("Ping Server"),
                   ),
                 ),
-                // Show status message if there is an error or loading text
-                if (_statusMessage.isNotEmpty)
+                // Show Error Message if exists
+                if (_errorMessage.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
-                    child: Text(_statusMessage, style: const TextStyle(color: Colors.red)),
+                    child: Text(_errorMessage, style: const TextStyle(color: Colors.red)),
                   ),
               ],
             ),
           ),
 
-          // --- BOTTOM SECTION: THE LIST ---
+          // --- SECTION 2: THE LIST ---
           Expanded(
             child: ListView.builder(
               itemCount: _matches.length,
               itemBuilder: (context, index) {
                 final match = _matches[index];
                 final isWin = match['win'] == true;
+                final kdaColor = (match['kills'] ?? 0) > (match['deaths'] ?? 0) 
+                    ? Colors.green[700] 
+                    : Colors.grey[800];
 
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -145,7 +132,7 @@ class _BackendTesterState extends State<BackendTester> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ROW 1: Champion Name and Stats
+                        // ROW 1: Champion & Stats
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -155,46 +142,38 @@ class _BackendTesterState extends State<BackendTester> {
                             ),
                             Text(
                               "${match['kills']} / ${match['deaths']} / ${match['assists']}",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  // Make KDA green if they did well (Kills > Deaths), else grey
-                                  color: (match['kills'] ?? 0) > (match['deaths'] ?? 0) 
-                                      ? Colors.green[700] 
-                                      : Colors.grey[800],
-                                  )
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: kdaColor),
                             ),
-                            Text(
-                              isWin ? "VICTORY" : "DEFEAT",
-                              style: TextStyle(
-                                color: isWin ? Colors.blue : Colors.red,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              "Gold: ${match['gold_earned']}  |  CS: ${match['cs']}  |  Dmg: ${match['total_damage']}",
-                              style: TextStyle(color: Colors.grey[700], fontSize: 12),
-                            ),
-
-                            const SizedBox(height: 10,)
                           ],
                         ),
-                        Text("Gold: ${match['gold_earned']} | CS: ${match['cs']}"),
+                        // Win/Loss Label
+                        Text(
+                          isWin ? "VICTORY" : "DEFEAT",
+                          style: TextStyle(
+                            color: isWin ? Colors.blue : Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        // Stats Row
+                        Text(
+                          "Gold: ${match['gold_earned']}  |  CS: ${match['cs']}  |  Dmg: ${match['total_damage']}",
+                          style: TextStyle(color: Colors.grey[700], fontSize: 12),
+                        ),
                         const SizedBox(height: 10),
-                        
+
                         // ROW 2: Item Images
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: (match['Items'] as List<dynamic>).map<Widget>((itemUrl) {
-                              if (itemUrl == null) return const SizedBox(); // Skip empty items
+                              if (itemUrl == null) return const SizedBox();
                               return Padding(
                                 padding: const EdgeInsets.only(right: 5.0),
                                 child: Image.network(
-                                  itemUrl, 
-                                  width: 30, 
+                                  itemUrl,
+                                  width: 30,
                                   height: 30,
-                                  errorBuilder: (c,e,s) => const Icon(Icons.broken_image, size: 30),
+                                  errorBuilder: (c, e, s) => const Icon(Icons.broken_image, size: 30),
                                 ),
                               );
                             }).toList(),
