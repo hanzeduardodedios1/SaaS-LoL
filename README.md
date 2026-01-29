@@ -1,4 +1,3 @@
-```markdown
 # League of Legends Analytics Dashboard 📊
 
 A full-stack, cross-platform application that provides real-time player statistics and match history analysis. This project demonstrates a **decoupled microservices architecture**, optimizing bandwidth and API usage through a custom Python proxy server.
@@ -49,8 +48,7 @@ flowchart LR
     Proxy -->|Requests Data| RiotAPI
     RiotAPI -.->|Raw Data| Proxy
     Proxy -.->|Optimized JSON| Frontend
-
-`Proxy -.->|Optimized JSON| Frontend ## 🚀 Tech Stack`
+🚀 Tech Stack
 Frontend: Flutter (Dart) - Deployed on Netlify
 
 Backend: Python (FastAPI) - Deployed on Render
@@ -73,6 +71,7 @@ Error Handling: Robust handling for 404s (User Not Found) and external API timeo
 
 🔧 Local Setup & Installation
 1. Backend (Python)
+Bash
 cd backend
 # Create virtual env (optional)
 python -m venv venv
@@ -83,15 +82,16 @@ pip install -r requirements.txt
 
 # Run server
 uvicorn main:app --reload
-
 2. Frontend (Flutter)
+Bash
 # Install dependencies
 flutter pub get
 
 # Run on Chrome
 flutter run -d chrome
-
 🔮 Future Improvements
 Redis Caching: Cache frequent player lookups to reduce API calls to Riot.
 
 Data Visualization: Add graphs for Gold/Min and CS/Min trends over time.
+
+Built by Hanz Eduardo De Dios
