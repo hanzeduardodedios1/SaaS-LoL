@@ -100,7 +100,7 @@ class _MatchHistoryScreenState extends State<MatchHistoryScreen> {
                     onPressed: _isLoading ? null : _searchPlayer, // Disable if loading
                     child: _isLoading 
                         ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                        : const Text("Ping Server"),
+                        : const Text("Search Summoner"),
                   ),
                 ),
                 // Show Error Message if exists
