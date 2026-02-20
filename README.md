@@ -70,7 +70,8 @@ flowchart LR
 
 ## 📸 Screenshots
 
-*(Drag and drop a screenshot of your app running here)*
+<img width="3833" height="1820" alt="image" src="https://github.com/user-attachments/assets/01ec8121-3fd3-4b09-be25-089ca8aa7cef" />
+
 
 ---
 
